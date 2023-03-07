@@ -12,7 +12,7 @@
 %token NUMBER // kinds of non-trivial tokens expected from the lexer
 %start commande // main non-terminal
 %left '+' '-'
-%left '*'
+%left '*' '/'
 %nonassoc UMOINS
 
 %% // denotes the begining of the grammar with bison-specific syntax
@@ -23,6 +23,7 @@ expression: // an expression is
 	  expression '+' expression // either a sum of an expression and a term
 	| expression '-' expression // or an expression minus a term
 	| expression '*' expression
+	| expression '/' expression
 	| '(' expression ')'
 	| '-' expression %prec UMOINS
 	| NUMBER
