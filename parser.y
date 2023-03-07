@@ -12,7 +12,7 @@
 %token NUMBER // kinds of non-trivial tokens expected from the lexer
 %start commande // main non-terminal
 %left '+' '-'
-%left '*'
+%left '*' '/'
 %nonassoc UMOINS
 
 %% // denotes the begining of the grammar with bison-specific syntax
@@ -27,6 +27,8 @@ expression: // an expression is
 		{ $$ = $1-$3; }
 	| expression '*' expression
 		{ $$ = $1*$3; }
+	| expression '/' expression
+		{ $$ = $1/$3; }
 	| '(' expression ')'
 		{ $$ = $2; }
 	| '-' expression %prec UMOINS
