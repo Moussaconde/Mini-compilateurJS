@@ -18,14 +18,21 @@
 %% // denotes the begining of the grammar with bison-specific syntax
 
 commande: expression ';'
+		{ printf("Resultat= %i\n", $1); }
 
 expression: // an expression is
 	  expression '+' expression // either a sum of an expression and a term
+		{ $$ = $1+$3; }
 	| expression '-' expression // or an expression minus a term
+		{ $$ = $1-$3; }
 	| expression '*' expression
+		{ $$ = $1*$3; }
 	| '(' expression ')'
+		{ $$ = $2; }
 	| '-' expression %prec UMOINS
+		{ $$ = -$2; }
 	| NUMBER
+		{ $$ = $1; }	//default semantic value
 	;
 
 %% // denotes the end of the grammar
