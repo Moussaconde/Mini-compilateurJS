@@ -6,9 +6,10 @@
 %{ // the code between %{ and %} is copied at the start of the generated .c
 	#include <stdio.h>
 	int yylex(void); // -Wall : avoid implicit call
-	int yyerror(const char*); // on fonctions defined by the generator
+	int yyerror(double*, const char*); // on fonctions defined by the generator
 %}
 
+%parse-param {double* rez}
 %union { double number; }
 %token <number> NUMBER // kinds of non-trivial tokens expected from the lexer
 %type <number> expression
@@ -20,7 +21,8 @@
 %% // denotes the begining of the grammar with bison-specific syntax
 
 commande: expression ';'
-		{ printf("Resultat= %f\n", $1); }
+		{ //*printf("Resultat= %f\n", $1);
+		  *rez = $1; }
 
 expression: // an expression is
 	  expression '+' expression // either a sum of an expression and a term
@@ -41,7 +43,7 @@ expression: // an expression is
 
 %% // denotes the end of the grammar
 // everything after %% is copied at the end of the generated .c
-int yyerror(const char *msg)
+int yyerror(double* rez,const char *msg)
 { // called by the parser if the parsing fails
 	printf("Parsing:: syntax error\n");
 	return 1; // to distinguish with the 0 retured by the success

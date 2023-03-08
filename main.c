@@ -6,8 +6,10 @@
 #include <stdlib.h>
 int main(void) 
 {
-	if (!yyparse())
+	double rez;
+	if (!yyparse(&rez))
        	{ // call to the parsing (and lexing) function
+	  	printf("Resultat = %f\n", rez);
 		printf("\nParsing:: c'est bien une expression arithmétique\n"); // reached if parsing follow
 	}
 	exit(EXIT_SUCCESS);
