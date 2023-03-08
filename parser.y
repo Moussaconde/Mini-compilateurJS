@@ -9,7 +9,9 @@
 	int yyerror(const char*); // on fonctions defined by the generator
 %}
 
-%token NUMBER // kinds of non-trivial tokens expected from the lexer
+%union { double number; }
+%token <number> NUMBER // kinds of non-trivial tokens expected from the lexer
+%type <number> expression
 %start commande // main non-terminal
 %left '+' '-'
 %left '*' '/'
@@ -18,7 +20,7 @@
 %% // denotes the begining of the grammar with bison-specific syntax
 
 commande: expression ';'
-		{ printf("Resultat= %i\n", $1); }
+		{ printf("Resultat= %f\n", $1); }
 
 expression: // an expression is
 	  expression '+' expression // either a sum of an expression and a term
