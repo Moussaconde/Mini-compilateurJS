@@ -5,10 +5,10 @@ RM      = rm -f
 
 all: main
 
-main: main.c parser.y lexeur.l
+main: main.c parser.y lexeur.l AST.c AST.h
 	bison -d parser.y
 	flex lexeur.l
-	$(CC) -o main main.c parser.tab.c lex.yy.c
+	$(CC) $(CFLAGS) -o main main.c parser.tab.c lex.yy.c AST.c
 
 clean:
-	$(RM) parseur.tab.c lex.yy.c
+	$(RM) parser.tab.c parser.tab.h lex.yy.c
