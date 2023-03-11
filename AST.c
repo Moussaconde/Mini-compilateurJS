@@ -86,12 +86,15 @@ void post_fix(AST_expr t) {
             break;
         case '*':
             printf("MultNb\n");
+	    break;
+	case '/':
+	    printf("ModuNb\n");
             break;
         case 'M':
             printf("NegaNb\n");
             break;
 	default:
-	    printf("CsteNb %d\n", t->number);
+	    printf("CsteNb %f\n", t->number);
 	    break;
     }
 }
