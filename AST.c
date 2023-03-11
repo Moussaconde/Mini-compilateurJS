@@ -69,12 +69,39 @@ void print_expr(AST_expr t){
     printf("] ");
   }
 }
+
+/*Post_fix print an AST*/
+void post_fix(AST_expr t) {
+    if (t == NULL) return;
+
+    post_fix(t->left);
+    post_fix(t->right);
+
+    switch (t->rule) {
+        case '+':
+            printf("AddiNb\n");
+            break;
+        case '-':
+            printf("SubiNb\n");
+            break;
+        case '*':
+            printf("MultNb\n");
+            break;
+        case 'M':
+            printf("NegaNb\n");
+            break;
+	default:
+	    printf("CsteNb %d\n", t->number);
+	    break;
+    }
+}
+
 void print_comm(AST_comm t){
   if (t!=NULL) {
-    printf("[ ");
-    printf(":%c: ",t->rule);
-    print_expr(t->expr1);
-    printf("] ");
+    //printf("[ ");
+   // printf(":%c: ",t->rule);
+    post_fix(t->expr1);
+    //printf("] ");
   }
 
 }
