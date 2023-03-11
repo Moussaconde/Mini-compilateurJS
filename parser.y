@@ -13,7 +13,7 @@
 
 %parse-param {AST_comm *rez}
 %union {
-	int number;
+	double number;
 	AST_expr expr;
 	AST_comm comm;
 }
@@ -23,7 +23,7 @@
 %type <comm> commande
 %start commande // main non-terminal
 %left '+' '-'
-%left '*'
+%left '*' '/'
 %nonassoc UMOINS
 
 %% // denotes the begining of the grammar with bison-specific syntax
@@ -38,6 +38,8 @@ expression: // an expression is
 		{ $$ = new_binary_expr('-',$1,$3); }
 	| expression '*' expression
 		{ $$ = new_binary_expr('*',$1,$3); }
+	| expression '/' expression
+		{ $$ = new_binary_expr('/',$1,$3); }
 	| '(' expression ')'
 		{ $$ = $2; }
 	| '-' expression %prec UMOINS
