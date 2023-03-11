@@ -11,9 +11,9 @@
 
 %%
 
-0|[1-9][0-9]*	{ printf("lex::NUMBER %s\n",yytext);
-		  yylval.number = atoi(yytext);
-	 	  return NUMBER; }
+\.[0-9]+|[0-9]+\.?[0-9]*  { printf("lex::NUMBER %s\n", yytext);
+			    yylval.number = atof(yytext);
+	 	  	    return NUMBER; }
 
 [\t\r]	{ ; } // separator
 
