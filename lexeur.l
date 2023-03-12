@@ -10,8 +10,26 @@
 
 %%
 
+
 \.[0-9]+|[0-9]+\.?[0-9]*	{ printf("lex: création token NUMBER %s\n",yytext);
 	 	  return NUMBER; }
+
+
+"True" | "False" 	{ return BOOLEAN ;}
+
+"=="		{ return EQUAL; }
+
+"<="		{ return LESS_EQUAL;}
+
+">="		{ return GR_EQUAL; }
+
+"!="		{ return NOT_EQUAL; }
+
+"!"		{ return NEGATION; }
+
+">"		{ return GREATER; }
+
+"<"		{ return LESSER; }
 
 [\t\r]	{ ; } // separator
 
@@ -20,6 +38,7 @@
 
 .	{ printf("lex: création token %s\n",yytext);
 	  return yytext[0]; }
+
 
 %%
 int yywrap(void){ return 1; } // function called at the end of the file

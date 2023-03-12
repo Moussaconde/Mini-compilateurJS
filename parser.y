@@ -9,24 +9,59 @@
 	int yyerror(const char*); // on fonctions defined by the generator
 %}
 
-%token NUMBER // kinds of non-trivial tokens expected from the lexer
 %start commande // main non-terminal
+%left NOT_EQUAL EQUAL
+%left LESSER LESS_EQUAL GREATER GR_EQUAL
 %left '+' '-'
 %left '*' '/'
+%nonassoc NEGATION
 %nonassoc UMOINS
+
+%token		NUMBER
+%token		BOOLEAN
+%token 		EQUAL
+%token 		LESS_EQUAL
+%token 		GR_EQUAL
+%token 		LESSER
+%token 		GREATER
+%token 		NOT_EQUAL
+%token		NEGATION
 
 %% // denotes the begining of the grammar with bison-specific syntax
 
 commande: expression ';'
 
 expression: // an expression is
-	  expression '+' expression // either a sum of an expression and a term
-	| expression '-' expression // or an expression minus a term
-	| expression '*' expression
-	| expression '/' expression
-	| '(' expression ')'
-	| '-' expression %prec UMOINS
-	| NUMBER
+	  expression '+' expression {
+		printf("Addition\n");}
+	| expression '-' expression {
+		printf("Soustraction\n");}
+	| expression '*' expression {
+		printf("Multiplication\n");}
+	| expression '/' expression {
+		printf("Division\n");}
+	| '(' expression ')' {
+		printf("Entre parentheses\n");}
+	| '-' expression %prec UMOINS {
+		printf("- expression \n");}
+	| expression LESSER expression {
+		printf("INFerieur \n");}
+	| expression GREATER expression {
+		printf("SUPerieur\n");}
+	| expression EQUAL expression {
+		printf("EGAl\n");}
+	| expression LESS_EQUAL expression {
+		printf("INF ou egal\n"); }
+	| expression GR_EQUAL expression {
+		printf("SUP ou egal\n"); }
+	| expression NOT_EQUAL expression {
+		printf("EGAL OU PAS \n");}
+	| NEGATION expression %prec NEGATION {
+		printf("Negation expresssion\n");}
+	| NUMBER {
+		printf("nombre\n");}
+	| BOOLEAN {
+		printf("booleen\n");}
 	;
 
 %% // denotes the end of the grammar
