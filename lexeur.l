@@ -45,10 +45,14 @@
 "<"		{ return LESSER; }
 
 
-[0-9]*\.?[0-9]+e-?[0-9]+	{ return NUMBER; }
+[0-9]*\.?[0-9]+e-?[0-9]+	{ 
+		yylval.number = atof(yytext);
+		return NUMBER; }
 
 
-"NaN"	{ return NUMBER;}
+"NaN"	{
+		yylval.number = atoi(yytext);
+		 return NUMBER;}
 
 
 [\t\r]	{ ; } // separator
