@@ -44,6 +44,13 @@
 
 "<"		{ return LESSER; }
 
+
+[0-9]*\.?[0-9]+e-?[0-9]+	{ return NUMBER; }
+
+
+"NaN"	{ return NUMBER;}
+
+
 [\t\r]	{ ; } // separator
 
 \n	{ printf("lex: fin de lecture");
