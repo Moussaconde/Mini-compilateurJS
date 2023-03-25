@@ -13,6 +13,11 @@
 \.[0-9]+|[0-9]+\.?[0-9]*	{ printf("lex: création token NUMBER %s\n",yytext);
 	 	  return NUMBER; }
 
+[0-9]*\.?[0-9]+e-?[0-9]+	{ return NUMBER; }
+
+
+"NaN"	{ return NUMBER;}
+
 [\t\r]	{ ; } // separator
 
 \n	{ printf("lex: fin de lecture");
