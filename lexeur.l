@@ -44,6 +44,17 @@
 
 "<"		{ return LESSER; }
 
+
+[0-9]*\.?[0-9]+e-?[0-9]+	{ 
+		yylval.number = atof(yytext);
+		return NUMBER; }
+
+
+"NaN"	{
+		yylval.number = atoi(yytext);
+		 return NUMBER;}
+
+
 [\t\r]	{ ; } // separator
 
 \n	{ printf("lex: fin de lecture\n\n");
