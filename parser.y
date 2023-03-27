@@ -9,7 +9,7 @@
 	int yyerror(const char*); // on fonctions defined by the generator
 %}
 
-%start commande // main non-terminal
+%start programme
 %left NOT_EQUAL EQUAL
 %left LESSER LESS_EQUAL GREATER GR_EQUAL
 %left '+' '-'
@@ -28,6 +28,10 @@
 %token		NEGATION
 
 %% // denotes the begining of the grammar with bison-specific syntax
+
+programme: %empty
+	 | commande programme
+	 ;
 
 commande: expression ';'
 
