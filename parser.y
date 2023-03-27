@@ -10,12 +10,16 @@
 %}
 
 %token NUMBER // kinds of non-trivial tokens expected from the lexer
-%start commande // main non-terminal
+%start programme // main non-terminal
 %left '+' '-'
 %left '*' '/'
 %nonassoc UMOINS
 
 %% // denotes the begining of the grammar with bison-specific syntax
+
+programme: %empty
+	 | commande programme
+	 ;
 
 commande: expression ';'
 
