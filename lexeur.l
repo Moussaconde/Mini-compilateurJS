@@ -45,13 +45,13 @@
 "<"		{ return LESSER; }
 
 
-[0-9]*\.?[0-9]+e-?[0-9]+	{ 
+[0-9]*\.?[0-9]+e[+|-]?[0-9]+	{ 
 		yylval.number = atof(yytext);
 		return NUMBER; }
 
 
-"NaN"	{
-		yylval.number = atoi(yytext);
+NaN	{
+		yylval.number = 0.0/0.0;
 		 return NUMBER;}
 
 

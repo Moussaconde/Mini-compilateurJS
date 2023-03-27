@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 #include "AST.h"
 
 /* create an AST from a root value and two AST sons */
@@ -132,7 +133,12 @@ void post_fix(AST_expr t) {
     else if(strcmp(t->rule, "M") == 0)
 	    printf("NegaNb\n");
     else if(strcmp(t->rule, "N") == 0)
-	    printf("CsteNb %f\n", t->number);
+    {
+	    if (isnan(t->number))
+		    printf("CsteNb NaN\n");
+	    else
+		    printf("CsteNb %e\n", t->number);
+    }
     else if(strcmp(t->rule, "B") == 0)
 	    printf("CsteBo %s\n", t->boolean);
     //else
