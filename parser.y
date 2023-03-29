@@ -16,7 +16,7 @@
 
 %parse-param {AST_comm *rez}
 %union {
-	double number;
+	float number;
 	char *boolean;
 	AST_expr expr;
 	AST_comm comm;
