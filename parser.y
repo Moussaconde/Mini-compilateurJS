@@ -20,11 +20,12 @@
 	char *boolean;
 	AST_expr expr;
 	AST_comm comm;
+	//AST_prog prog;
 }
 
 
 
-%start commande // main non-terminal
+%start commande
 %left NOT_EQUAL EQUAL
 %left LESSER LESS_EQUAL GREATER GR_EQUAL
 %left ADDITION SUBSTRACTION
@@ -36,6 +37,7 @@
 
 %type   <expr>		expression
 %type   <comm>		commande
+//%type	<prog>		programme
 
 
 
@@ -54,6 +56,13 @@
 %token			NEGATION
 
 %% // denotes the begining of the grammar with bison-specific syntax
+
+/*programme:
+	   %empty
+		{ *rez = new_program(NULL);}
+	 | commande programme
+		{ *rez = new_program(*c);}
+	 ;*/
 
 commande: expression ';'
 		{ *rez = new_command($1); }

@@ -69,6 +69,18 @@ AST_comm new_command(AST_expr expression){
 
 }
 
+/* create an AST leaf from a value */
+/*
+AST_prog new_program(AST_comm commande){
+  AST_prog t =  malloc(sizeof(struct _program_tree));
+  if (t!=NULL){	malloc ok 
+    t->commande = commande;
+  } else printf("ERR : MALLOC ");
+  return t;
+
+}
+*/
+
 /* delete an AST */
 void free_expr(AST_expr t)
 {
@@ -85,6 +97,15 @@ void free_comm(AST_comm t)
     free(t);
   }
 }
+
+/*void free_prog(AST_prog t)
+{
+  if (t!=NULL) {
+    free_comm(t->commande);
+    free(t);
+  }
+}*/
+
 
 /* infix print an AST*/
 void print_expr(AST_expr t){
@@ -105,5 +126,14 @@ void print_comm(AST_comm t){
     print_expr(t->expr1);
     printf("] ");
   }
-
 }
+
+/*
+void print_prog(AST_prog t){
+  if (t!=NULL) {
+    printf("[ ");
+   // printf(":%s: ",t->rule);
+    print_comm(t->commande);
+    printf("] ");
+  }
+}*/
