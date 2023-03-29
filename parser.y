@@ -9,23 +9,23 @@
 	#include <stdlib.h>
 	#include "AST.h"
 	int yylex(void); // -Wall : avoid implicit call
-	int yyerror(AST_comm*, const char*); // on fonctions defined by the generator
+	int yyerror(AST_prog*, const char*); // on fonctions defined by the generator
 %}
 
 
 
-%parse-param {AST_comm *rez}
+%parse-param {AST_prog *rez}
 %union {
 	double number;
 	char *boolean;
 	AST_expr expr;
 	AST_comm comm;
-	//AST_prog prog;
+	AST_prog prog;
 }
 
 
 
-%start commande
+%start programme
 %left NOT_EQUAL EQUAL
 %left LESSER LESS_EQUAL GREATER GR_EQUAL
 %left ADDITION SUBSTRACTION
@@ -37,7 +37,7 @@
 
 %type   <expr>		expression
 %type   <comm>		commande
-//%type	<prog>		programme
+%type	<prog>		programme
 
 
 
@@ -57,15 +57,21 @@
 
 %% // denotes the begining of the grammar with bison-specific syntax
 
-/*programme:
+programme:
 	   %empty
 		{ *rez = new_program(NULL);}
 	 | commande programme
-		{ *rez = new_program(*c);}
-	 ;*/
+		{
+			AST_command_list command_list = malloc(sizeof(struct _command_list));
+      command_list->command = $1;
+      command_list->next = (*rez)->command_list;
+      (*rez)->command_list = command_list;
+      *rez = new_program((*rez)->command_list); 
+		}
+	 ;
 
 commande: expression ';'
-		{ *rez = new_command($1); }
+		{ $$ = new_command($1); }
 
 expression: // an expression is
 	  expression ADDITION expression // either a sum of an expression and a term
@@ -157,7 +163,7 @@ expression: // an expression is
 
 %% // denotes the end of the grammar
 // everything after %% is copied at the end of the generated .c
-int yyerror(AST_comm* rez, const char *msg)
+int yyerror(AST_prog* rez, const char *msg)
 { // called by the parser if the parsing fails
 	printf("Parsing:: syntax error\n");
 	return 1; // to distinguish with the 0 retured by the success
