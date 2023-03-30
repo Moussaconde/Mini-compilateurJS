@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 #include "AST.h"
 
 /* create an AST from a root value and two AST sons */
@@ -69,6 +70,14 @@ AST_comm new_command(AST_expr expression){
 
 }
 
+/* create an AST leaf from a value */
+
+AST_prog new_program(AST_command_list command_list){
+	AST_prog program = malloc(sizeof(struct _prog_tree));
+  program->command_list = command_list;
+  return program;
+}
+
 /* delete an AST */
 void free_expr(AST_expr t)
 {
@@ -85,6 +94,19 @@ void free_comm(AST_comm t)
     free(t);
   }
 }
+
+void free_prog(AST_prog program) {
+  AST_command_list curr_command = program->command_list;
+  while (curr_command != NULL) {
+    AST_command_list next_command = curr_command->next;
+    free_comm(curr_command->command);
+    free(curr_command);
+    curr_command = next_command;
+  }
+  free(program);
+}
+
+
 
 /* infix print an AST*/
 void print_expr(AST_expr t){
@@ -132,7 +154,12 @@ void post_fix(AST_expr t) {
     else if(strcmp(t->rule, "M") == 0)
 	    printf("NegaNb\n");
     else if(strcmp(t->rule, "N") == 0)
-	    printf("CsteNb %f\n", t->number);
+    {
+	    if (isnan(t->number))
+		    printf("CsteNb NaN\n");
+	    else
+		    printf("CsteNb %g\n", t->number);
+    }
     else if(strcmp(t->rule, "B") == 0)
 	    printf("CsteBo %s\n", t->boolean);
     //else
@@ -144,7 +171,18 @@ void print_comm(AST_comm t){
     //printf("[ ");
    // printf(":%c: ",t->rule);
     post_fix(t->expr1);
-    printf("Halt\n");
+    printf("Drop\n");
     //printf("] ");
   }
 }
+
+void print_prog(AST_prog program) {
+  AST_command_list curr_command = program->command_list;
+  while (curr_command != NULL) {
+    print_comm(curr_command->command);
+    curr_command = curr_command->next;
+  }
+  printf("Halt\n");
+  free_prog(program);
+}
+
