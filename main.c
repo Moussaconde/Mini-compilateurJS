@@ -8,11 +8,11 @@
 int main(void) 
 {
 
-	AST_comm rez;
+	AST_prog rez;
 	if (!yyparse(&rez))
        	{ // call to the parsing (and lexing) function
-	  	print_comm(rez);
-		printf("\nParsing:: c'est bien une expression arithmétique\n"); // reached if parsing follow
+	  	print_prog(rez);
+		printf("\nParsing:: c'est un programme correct\n"); // reached if parsing follow
 	}
 	exit(EXIT_SUCCESS);
 }
