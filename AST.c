@@ -74,8 +74,8 @@ AST_comm new_command(AST_expr expression){
 
 AST_prog new_program(AST_command_list command_list){
 	AST_prog program = malloc(sizeof(struct _prog_tree));
-  program->command_list = command_list;
-  return program;
+  	program->command_list = command_list;
+  	return program;
 }
 
 /* delete an AST */
