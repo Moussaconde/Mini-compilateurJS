@@ -158,7 +158,7 @@ void post_fix(AST_expr t) {
 	    if (isnan(t->number))
 		    printf("CsteNb NaN\n");
 	    else
-		    printf("CsteNb %g\n", t->number);
+		    printf("CsteNb %f\n", t->number);
     }
     else if(strcmp(t->rule, "B") == 0)
 	    printf("CsteBo %s\n", t->boolean);
