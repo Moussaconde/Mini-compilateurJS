@@ -16,6 +16,14 @@
 [0-9]*\.?[0-9]+e-?[0-9]+	{ return NUMBER; }
 
 
+\/\/.*				{ printf("Commentaire \n");
+					return 0; }
+
+\/\*(?:.|[\r\n])*?\*\/		{ printf("Commentaire \n");
+					return 0;
+				}
+
+
 "NaN"	{ return NUMBER;}
 
 [\t\r]	{ ; } // separator
