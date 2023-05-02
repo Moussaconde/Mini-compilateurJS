@@ -9,7 +9,10 @@
 	int yyerror(const char*); // on fonctions defined by the generator
 %}
 
+
 %token NUMBER // kinds of non-trivial tokens expected from the lexer
+%token IDENT
+%token IMPORT
 %start programme // main non-terminal
 %left '+' '-'
 %left '*' '/'
@@ -22,6 +25,8 @@ programme: %empty
 	 ;
 
 commande: expression ';'
+	 | IMPORT IDENT ';'
+	 ;
 
 expression: // an expression is
 	  expression '+' expression // either a sum of an expression and a term
