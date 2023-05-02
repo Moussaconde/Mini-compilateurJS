@@ -9,7 +9,9 @@
 	int yyerror(const char*); // on fonctions defined by the generator
 %}
 
+
 %start programme
+%left AND
 %left NOT_EQUAL EQUAL
 %left LESSER LESS_EQUAL GREATER GR_EQUAL
 %left '+' '-'
@@ -17,6 +19,9 @@
 %nonassoc NEGATION
 %nonassoc UMOINS
 
+%token		AND
+%token		IDENT
+%token		IMPORT
 %token		NUMBER
 %token		BOOLEAN
 %token 		EQUAL
@@ -34,6 +39,8 @@ programme: %empty
 	 ;
 
 commande: expression ';'
+	 | IMPORT IDENT ';'
+	 ;
 
 expression: // an expression is
 	  expression '+' expression {
@@ -62,6 +69,8 @@ expression: // an expression is
 		printf("EGAL OU PAS \n");}
 	| NEGATION expression %prec NEGATION {
 		printf("Negation expresssion\n");}
+	| expression AND expression {
+		printf("ET &&\n");}
 	| NUMBER {
 		printf("nombre\n");}
 	| BOOLEAN {

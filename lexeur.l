@@ -6,6 +6,7 @@
 %{
 #include <stdio.h> // printf
 #include "parser.tab.h" // token constants defined in parseur.y via #define
+
 %}
 
 %%
@@ -34,8 +35,18 @@
 
 [0-9]*\.?[0-9]+e-?[0-9]+	{ return NUMBER; }
 
+[a-zA-Z_][a-zA-Z0-9_]*		{ return IDENT; }
 
-"NaN"	{ return NUMBER;}
+[[:space:]]*import[[:space:]]			{ return IMPORT; }
+
+
+\/\/.*				{ printf("Commentaire \n");
+					return 0; }
+
+
+"NaN"			{ return NUMBER;}
+
+"&&"			{ return AND; }
 
 
 [\t\r]	{ ; } // separator
