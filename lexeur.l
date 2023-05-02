@@ -7,6 +7,7 @@
 #include <stdio.h> // printf
 #include "AST.h"
 #include "parser.tab.h" // token constants defined in parseur.y via #define
+
 %}
 
 %%
@@ -49,10 +50,20 @@
 		yylval.number = atof(yytext);
 		return NUMBER; }
 
+[a-zA-Z_][a-zA-Z0-9_]*		{ return IDENT; }
 
-"NaN"	{
-		yylval.number = atoi(yytext);
-		 return NUMBER;}
+[[:space:]]*import[[:space:]]			{ return IMPORT; }
+
+
+\/\/.*				{ printf("Commentaire \n");
+					return 0; }
+
+
+"NaN"			{
+				yylval.number = atoi(yytext);
+				 return NUMBER;}
+
+"&&"			{ return AND; }
 
 
 [\t\r]	{ ; } // separator

@@ -6,16 +6,17 @@ typedef struct _prog_tree*    AST_prog;
 /* unary-and-binary tree structure */
 struct _expr_tree {
   char *rule;                    /* "name" of the rule/operation operation */
-  double number;                   /* int  for value */			/*String */
+  double number;                   /* int  for value */			
   char *boolean;
+  char *identifier;
   struct _expr_tree* left;           /* NULL if unary node or leaf*/
-  struct _expr_tree* right;          /* used for unary node but NULL if leaf */
+  struct _expr_tree* right;
 };
 
 
 struct _command_tree {
-  char *rule;                   /* "name" of the rule/operation operation */
-  AST_expr expr1;     	        /* used for command with at least one sub-expression */
+  char *rule;   /* "name" of the rule/operation operation */
+  AST_expr expr1;
 };
 
 
@@ -45,6 +46,8 @@ AST_expr new_number_expr(double	number);
 /* create an AST leaf from a BOOLEAN */
 AST_expr new_boolean_expr(char *boolean);
 
+/* create an import AST*/
+AST_expr new_import_expr(char *identifier);
 
 
 /* create an AST leaf from a value */

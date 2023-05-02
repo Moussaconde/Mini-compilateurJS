@@ -8,6 +8,7 @@ AST_expr new_binary_expr(char *rule, AST_expr left, AST_expr right) {
   AST_expr t=(struct _expr_tree*) malloc(sizeof(struct _expr_tree));
   if (t!=NULL){	/* malloc ok */
     t->rule = malloc(sizeof(rule));
+    t->identifier = NULL;
     strcpy(t->rule,rule);
     t->left=left;
     t->right=right;
@@ -29,6 +30,7 @@ AST_expr new_number_expr(double number)
   if (t!=NULL){	/* malloc ok */
     t->boolean = malloc(6*sizeof(char));
     t->rule = malloc(sizeof(char)+1);
+    t->identifier = NULL;
     strcpy(t->rule, "N");
     t->number=number;
     if(t->number > 0)
@@ -47,6 +49,7 @@ AST_expr new_boolean_expr(char *boolean)
   if (t!=NULL){	/* malloc ok */
     t->rule = malloc(sizeof(char)+1);
     strcpy(t->rule, "B");
+    t->identifier = NULL;
     t->boolean = malloc(sizeof(boolean));
     strcpy(t->boolean, boolean);
     if(strcmp(t->boolean, "True") == 0)
@@ -57,6 +60,21 @@ AST_expr new_boolean_expr(char *boolean)
   } else printf("ERR : MALLOC ");
   return t;
 }
+
+/* create an AST from a root value and two AST sons */
+AST_expr new_import_expr(char* id) {
+  AST_expr t=(struct _expr_tree*) malloc(sizeof(struct _expr_tree));
+  if (t!=NULL){	/* malloc ok */
+    t->rule = malloc(sizeof(char)+1);
+    strcpy(t->rule, "I");
+    t->identifier = malloc(sizeof(id));
+    strcpy(t->identifier, id);
+    t->left=NULL;
+    t->right=NULL;
+  } else printf("ERR : MALLOC ");
+  return t;
+}
+
 
 
 /* create an AST leaf from a value */
@@ -76,6 +94,7 @@ AST_prog new_program(AST_command_list command_list){
   program->command_list = command_list;
   return program;
 }
+
 
 /* delete an AST */
 void free_expr(AST_expr t)
