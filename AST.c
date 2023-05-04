@@ -13,7 +13,12 @@ AST_expr new_binary_expr(char *rule, AST_expr left, AST_expr right) {
     strcpy(t->rule,rule);
     t->left=left;
     t->right=right;
-    t->size = 1 + left->size +right->size;
+    if(left != NULL){
+   	t->size = 1 + left->size +right->size;
+    }
+    else{
+	t->size = 1 + right->size;
+    }
     free(rule);
   } else printf("ERR : MALLOC ");
   return t;
@@ -67,17 +72,45 @@ AST_expr new_boolean_expr(char *boolean)
 
 /* create an AST from a root value and two AST sons */
 AST_expr new_import_expr(char* id) {
-printf("%s", id);
   AST_expr t=(struct _expr_tree*) malloc(sizeof(struct _expr_tree));
   if (t!=NULL){	/* malloc ok */
     t->rule = malloc(sizeof(char)+1);
     strcpy(t->rule, "I");
-    t->identifier = malloc(strlen(id)+1);
+    t->identifier = malloc(sizeof(id)+1);
     strcpy(t->identifier, id);
-    t->boolean = NULL;
-    t->number = 0;
     t->left=NULL;
     t->right=NULL;
+    t->size = 1;
+  } else printf("ERR : MALLOC ");
+  return t;
+}
+
+
+/* create an ASSIGN */
+AST_expr new_assign_expr(char* r, char* id, AST_expr right) {
+  AST_expr t=(struct _expr_tree*) malloc(sizeof(struct _expr_tree));
+  if (t!=NULL){	/* malloc ok */
+    t->rule = malloc(sizeof(r)+1);
+    strcpy(t->rule, r);
+    t->identifier = malloc(sizeof(id) + 1);
+    strcpy(t->identifier, id);
+    t->right=right;
+    t->left = NULL;
+    t->size = 1 +right->size;
+  } else printf("ERR : MALLOC ");
+  return t;
+}
+
+/* create an ID*/
+AST_expr new_id_expr(char* id) {
+  AST_expr t=(struct _expr_tree*) malloc(sizeof(struct _expr_tree));
+  if (t!=NULL){	/* malloc ok */
+    t->rule = malloc(sizeof(char)+2);
+    strcpy(t->rule, "id");
+    t->identifier = malloc(sizeof(id) + 1);
+    strcpy(t->identifier, id);
+    t->right= NULL;
+    t->left = NULL;
     t->size = 1;
   } else printf("ERR : MALLOC ");
   return t;
@@ -133,6 +166,22 @@ void free_prog(AST_prog program) {
   free(program);
 }
 
+/*Open a file and prints its content*/
+void print_file(char *filename) {
+    FILE *file = fopen(filename, "r"); // open file in read mode
+    if (file == NULL) { // check if file was successfully opened
+        printf("Error: Unable to open file %s.\n", filename);
+        return;
+    }
+
+    char line[1000];
+    while (fgets(line, sizeof(line), file) != NULL) { // read file line by line
+        printf("%s", line);
+    }
+
+    fclose(file); // close the file
+}
+
 
 
 /* infix print an AST*/
@@ -160,6 +209,23 @@ void post_fix(AST_expr t) {
 	printf("Jump 1\n");
 	printf("CsteBo False\n");
     }
+     else if(strcmp(t->rule, "=") == 0)
+    {
+	post_fix(t->right);
+	printf("SetVar %s\n", t->identifier);
+	    
+    }
+    else if(strcmp(t->rule, "I") == 0)
+    {
+	    FILE *fp;
+	    strcat(t->identifier, ".jsm");
+            print_file(t->identifier); 
+    }
+    else if(strcmp(t->rule, "id") == 0)
+    {
+            printf("GetVar %s\n", t->identifier); 
+    }
+
     else {
     post_fix(t->left);
     post_fix(t->right);
@@ -199,27 +265,8 @@ void post_fix(AST_expr t) {
     else if(strcmp(t->rule, "B") == 0)
 	    printf("CsteBo %s\n", t->boolean);
     
-    else if(strcmp(t->rule, "I") == 0)
-    {
-	    FILE *fp;
-	    strcat(t->identifier, ".jsm");
-            fp = fopen(t->identifier, "r");
-            if (fp == NULL) {
-                printf("ERROR: Unable to open file %s.\n", t->identifier);
-                exit(1);
-            }
-            char contents[10000];
-            int index = 0;
-            while (1) {
-                int c = fgetc(fp);
-                if (c == EOF) {
-                    break;
-                }
-                contents[index++] = (char)c;
-            }
-            fclose(fp);
-    }
-    }
+  
+       }
     //else
 
 }
