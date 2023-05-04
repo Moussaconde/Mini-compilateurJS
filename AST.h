@@ -17,6 +17,8 @@ struct _expr_tree {
 struct _command_tree {
   char *rule;   /* "name" of the rule/operation operation */
   AST_expr expr1;
+  struct _command_tree* com1;
+  struct _command_tree* com2;
 };
 
 
@@ -51,6 +53,9 @@ AST_expr new_import_expr(char *identifier);
 
 /* create an assign AST*/
 AST_expr new_assign_expr(char* rule, char* identifier, AST_expr right);
+
+/* create an IF or WHILE AST */
+AST_comm new_if_while_expr(char* r,AST_expr expr, AST_comm com1, AST_comm com2);
 
 
 /* create an AST leaf from a value */

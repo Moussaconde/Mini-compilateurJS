@@ -41,6 +41,9 @@
 %type	<prog>		programme
 
 
+%token			IF
+%token			ELSE
+%token			WHILE
 %token 			ASSIGN
 %token			AND
 %token	<id>		IDENT
@@ -58,7 +61,6 @@
 %token 			GREATER
 %token 			NOT_EQUAL
 %token			NEGATION
-
 
 %% // denotes the begining of the grammar with bison-specific syntax
 
@@ -79,6 +81,30 @@ commande: expression ';'
 		{ $$ = new_command($1); }
 	| IMPORT IDENT ';'
 		{ $$ = new_command(new_import_expr($2)); }
+	 | ';'
+		{ $$ = new_command(NULL);}
+	 | '{' programme '}' 
+		{
+			AST_command_list command_list = malloc(sizeof(struct _command_list));
+      			//command_list->command = NULL;
+      			command_list->next = ($2)->command_list;
+      			($2)->command_list = command_list;
+      			$$ = new_program(($2)->command_list); 
+		}
+	 | IF '(' expression ')' commande ELSE commande
+		{
+			char *r = (char *) malloc(sizeof(char)+2);
+			strcpy(r, "if");
+			$$ = new_if_while_expr(r,$3, $5, $7);
+		}
+	 | WHILE '(' expression ')' commande
+		{
+			char *r = (char *) malloc(sizeof(char)+2);
+			strcpy(r, "wh");
+			$$ = new_if_while_expr(r,$3, $5, NULL);
+		}
+
+	 ;
 
 expression: // an expression is
 	  expression ADDITION expression // either a sum of an expression and a term

@@ -89,6 +89,19 @@ AST_expr new_assign_expr(char* r, char* id, AST_expr right) {
   return t;
 }
 
+/* create an IF or WHILE AST */
+AST_comm new_if_while_expr(char* r, AST_expr expr, AST_comm com1, AST_comm com2) {
+  AST_comm t=(struct _command_tree*) malloc(sizeof(struct _expr_tree));
+  if (t!=NULL){	/* malloc ok */
+    t->rule = malloc(sizeof(r)+1);
+    strcpy(t->rule, r);
+    t->expr1=expr;
+    t->com1 = com1;
+    t->com2 = com2;
+  } else printf("ERR : MALLOC ");
+  return t;
+}
+
 /* create an AST leaf from a value */
 AST_comm new_command(AST_expr expression){
   AST_comm t =  malloc(sizeof(struct _command_tree));
@@ -139,7 +152,7 @@ void print_expr(AST_expr t){
   if (t!=NULL) {
     printf("[ ");
     print_expr(t->left);
-    if (t->left==NULL)
+    if(t->left==NULL)
 	    printf(":%f: ",t->number); 
     else printf(":%s: ",t->rule);
     print_expr(t->right);
@@ -149,8 +162,10 @@ void print_expr(AST_expr t){
 void print_comm(AST_comm t){
   if (t!=NULL) {
     printf("[ ");
-   // printf(":%s: ",t->rule);
+   printf(":%s: ",t->rule);
     print_expr(t->expr1);
+    print_comm(t->com1);
+    print_comm(t->com2);
     printf("] ");
   }
 }
