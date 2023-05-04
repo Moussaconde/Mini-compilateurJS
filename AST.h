@@ -52,6 +52,12 @@ AST_expr new_boolean_expr(char *boolean);
 /* create an import AST*/
 AST_expr new_import_expr(char *identifier);
 
+/* create an assign AST*/
+AST_expr new_assign_expr(char* rule, char* identifier, AST_expr right);
+
+/* create an ID AST */
+AST_expr new_id_expr(char* identifier);
+
 
 /* create an AST leaf from a value */
 AST_comm new_command(AST_expr expression);

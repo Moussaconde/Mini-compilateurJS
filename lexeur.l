@@ -50,7 +50,10 @@
 		yylval.number = atof(yytext);
 		return NUMBER; }
 
-[a-zA-Z_][a-zA-Z0-9_]*		{ return IDENT; }
+[a-zA-Z_][a-zA-Z0-9_]*		{ 
+		printf(" variable : %s\n", yytext);
+		yylval.id = strdup(yytext);
+				return IDENT; }
 
 
 NaN	{
@@ -66,6 +69,8 @@ NaN	{
 
 
 "&&"			{ return AND; }
+
+"="			{ return ASSIGN; }
 
 
 [\t\r]	{ ; } // separator
