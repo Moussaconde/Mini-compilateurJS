@@ -65,6 +65,8 @@
 
 "&&"			{ return AND; }
 
+"="			{ return ASSIGN; }
+
 
 [\t\r]	{ ; } // separator
 

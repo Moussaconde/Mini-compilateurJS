@@ -25,6 +25,7 @@
 
 
 %start programme
+%right ASSIGN
 %left AND
 %left NOT_EQUAL EQUAL
 %left LESSER LESS_EQUAL GREATER GR_EQUAL
@@ -40,6 +41,7 @@
 %type	<prog>		programme
 
 
+%token 			ASSIGN
 %token			AND
 %token	<id>		IDENT
 %token			IMPORT
@@ -171,7 +173,13 @@ expression: // an expression is
 			char *b = (char *) malloc(6*sizeof(char));
 			strcpy(b, $1);
 			$$ = new_boolean_expr($1); }
-
+	| IDENT ASSIGN expression 
+		{
+			char *r = (char *) malloc(sizeof(ASSIGN)+1);
+			strcpy(r, "=");
+			$$ = new_assign_expr(r, $1, $3);
+		}
+	;
 
 %% // denotes the end of the grammar
 // everything after %% is copied at the end of the generated .c

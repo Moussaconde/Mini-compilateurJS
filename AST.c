@@ -67,7 +67,7 @@ AST_expr new_import_expr(char* id) {
   if (t!=NULL){	/* malloc ok */
     t->rule = malloc(sizeof(char)+1);
     strcpy(t->rule, "I");
-    t->identifier = malloc(sizeof(id));
+    t->identifier = malloc(sizeof(id)+1);
     strcpy(t->identifier, id);
     t->left=NULL;
     t->right=NULL;
@@ -76,6 +76,18 @@ AST_expr new_import_expr(char* id) {
 }
 
 
+/* create an ASSIGN */
+AST_expr new_assign_expr(char* r, char* id, AST_expr right) {
+  AST_expr t=(struct _expr_tree*) malloc(sizeof(struct _expr_tree));
+  if (t!=NULL){	/* malloc ok */
+    t->rule = malloc(sizeof(r)+1);
+    strcpy(t->rule, r);
+    t->identifier = malloc(sizeof(id) + 1);
+    strcpy(t->identifier, id);
+    t->right=right;
+  } else printf("ERR : MALLOC ");
+  return t;
+}
 
 /* create an AST leaf from a value */
 AST_comm new_command(AST_expr expression){
