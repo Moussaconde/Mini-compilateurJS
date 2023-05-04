@@ -11,6 +11,7 @@
 
 
 %start programme
+%right ASSIGN
 %left AND
 %left NOT_EQUAL EQUAL
 %left LESSER LESS_EQUAL GREATER GR_EQUAL
@@ -19,6 +20,7 @@
 %nonassoc NEGATION
 %nonassoc UMOINS
 
+%token		ASSIGN
 %token		AND
 %token		IDENT
 %token		IMPORT
@@ -75,6 +77,8 @@ expression: // an expression is
 		printf("nombre\n");}
 	| BOOLEAN {
 		printf("booleen\n");}
+	| IDENT ASSIGN expression {
+		printf("variable\n");}
 	;
 
 %% // denotes the end of the grammar
