@@ -13,19 +13,19 @@
 %}
 
 
-
 %parse-param {AST_prog *rez}
 %union {
 	float number;
 	char *boolean;
+	char *id;
 	AST_expr expr;
 	AST_comm comm;
 	AST_prog prog;
 }
 
 
-
 %start programme
+%left AND
 %left NOT_EQUAL EQUAL
 %left LESSER LESS_EQUAL GREATER GR_EQUAL
 %left ADDITION SUBSTRACTION
@@ -40,7 +40,9 @@
 %type	<prog>		programme
 
 
-
+%token			AND
+%token	<id>		IDENT
+%token			IMPORT
 %token			ADDITION
 %token			SUBSTRACTION
 %token			MULTIPLICATION
@@ -54,6 +56,7 @@
 %token 			GREATER
 %token 			NOT_EQUAL
 %token			NEGATION
+
 
 %% // denotes the begining of the grammar with bison-specific syntax
 
@@ -72,6 +75,8 @@ programme:
 
 commande: expression ';'
 		{ $$ = new_command($1); }
+	| IMPORT IDENT ';'
+		{printf("%s", $2); $$ = new_command(new_import_expr($2)); }
 
 expression: // an expression is
 	  expression ADDITION expression // either a sum of an expression and a term
@@ -148,6 +153,13 @@ expression: // an expression is
 			strcpy(r, "!=");
 			$$ = new_binary_expr(r, $1, $3);
 		}
+	| expression AND expression 
+		{ 
+			char *r = (char *) malloc(sizeof(NOT_EQUAL)+1);
+			strcpy(r, "&&");
+			$$ = new_binary_expr(r, $1, $3);
+		}
+	
 	| NEGATION expression %prec NEG
 		{
 			char *r = (char *) malloc(sizeof(NEGATION)+1);
@@ -159,7 +171,7 @@ expression: // an expression is
 			char *b = (char *) malloc(6*sizeof(char));
 			strcpy(b, $1);
 			$$ = new_boolean_expr($1); }
-	;
+
 
 %% // denotes the end of the grammar
 // everything after %% is copied at the end of the generated .c
