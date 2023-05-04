@@ -20,6 +20,9 @@
 %nonassoc NEGATION
 %nonassoc UMOINS
 
+%token		IF
+%token		ELSE
+%token		WHILE
 %token		ASSIGN
 %token		AND
 %token		IDENT
@@ -42,6 +45,10 @@ programme: %empty
 
 commande: expression ';'
 	 | IMPORT IDENT ';'
+	 | ';'
+	 | '{' programme '}'
+	 | IF '(' expression ')' commande ELSE commande
+	 | WHILE '(' expression ')' commande
 	 ;
 
 expression: // an expression is
