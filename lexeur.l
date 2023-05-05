@@ -62,6 +62,12 @@ NaN	{
 
 [[:space:]]*import[[:space:]]			{ return IMPORT; }
 
+[[:space:]]*if[[:space:]]		{ return IF; }
+
+[[:space:]]*else[[:space:]]		{ return ELSE; }
+
+[[:space:]]*while[[:space:]]		{ return WHILE; }
+
 
 \/\/.*				{ printf("Commentaire \n");
 					return 0; }

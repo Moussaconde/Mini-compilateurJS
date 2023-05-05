@@ -20,15 +20,20 @@ struct _command_tree {
   char *rule;   /* "name" of the rule/operation operation */
   AST_expr expr1;
   int size;
+  AST_prog prog;
+  struct _command_tree* com1;
+  struct _command_tree* com2;
 };
 
 
 typedef struct _command_list {
   AST_comm command;
+  int size;
   struct _command_list *next;
 } *AST_command_list;
 
 struct _prog_tree {
+	int size;
 	AST_command_list command_list;
 };
 
@@ -58,9 +63,11 @@ AST_expr new_assign_expr(char* rule, char* identifier, AST_expr right);
 /* create an ID AST */
 AST_expr new_id_expr(char* identifier);
 
+/* create an IF or WHILE AST */
+AST_comm new_if_while_expr(char* r,AST_expr expr, AST_comm com1, AST_comm com2);
 
 /* create an AST leaf from a value */
-AST_comm new_command(AST_expr expression);
+AST_comm new_command(AST_expr expression, AST_prog prog);
 
 /* A new program */
 AST_prog new_program(AST_command_list commande);
