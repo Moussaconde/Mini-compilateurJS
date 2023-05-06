@@ -41,6 +41,9 @@
 %type	<prog>		programme
 
 
+%token			IF
+%token			ELSE
+%token			WHILE
 %token 			ASSIGN
 %token			AND
 %token	<id>		IDENT
@@ -59,7 +62,6 @@
 %token 			NOT_EQUAL
 %token			NEGATION
 
-
 %% // denotes the begining of the grammar with bison-specific syntax
 
 programme:
@@ -69,6 +71,7 @@ programme:
 		{
 			AST_command_list command_list = malloc(sizeof(struct _command_list));
      			command_list->command = $1;
+			command_list->size = 1+ $1->size;
       			command_list->next = (*rez)->command_list;
      			(*rez)->command_list = command_list;
      			*rez = new_program((*rez)->command_list); 
@@ -76,9 +79,34 @@ programme:
 	 ;
 
 commande: expression ';'
-		{ $$ = new_command($1); }
+		{ $$ = new_command($1, NULL); }
 	| IMPORT IDENT ';'
-		{ $$ = new_command(new_import_expr($2)); }
+		{ $$ = new_command(new_import_expr($2), NULL); }
+	 | ';'
+		{ $$ = new_command(NULL, NULL);}
+	 | '{' programme '}' 
+		{
+			AST_command_list command_list = malloc(sizeof(struct _command_list));
+      			command_list->command = malloc(sizeof(struct _command_tree)); 
+      			command_list->next = (*rez)->command_list;
+      			(*rez)->command_list = command_list;
+      			//$$ = new_program(($2)->command_list); 
+			$$ = new_command(NULL,new_program((*rez)->command_list));
+		}
+	 | IF '(' expression ')' commande ELSE commande
+		{
+			char *r = (char *) malloc(sizeof(char)+2);
+			strcpy(r, "if");
+			$$ = new_if_while_expr(r,$3, $5, $7);
+		}
+	 | WHILE '(' expression ')' commande
+		{
+			char *r = (char *) malloc(sizeof(char)+2);
+			strcpy(r, "wh");
+			$$ = new_if_while_expr(r,$3, $5, NULL);
+		}
+
+	 ;
 
 expression: // an expression is
 	  expression ADDITION expression // either a sum of an expression and a term
