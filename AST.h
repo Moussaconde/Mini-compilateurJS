@@ -17,7 +17,7 @@ struct _expr_tree {
 
 
 struct _command_tree {
-  char *rule;   /* "name" of the rule/operation operation */
+  char *rule;  /* "name" of the rule/operation operation */
   AST_expr expr1;
   int size;
   AST_prog prog;
@@ -79,5 +79,5 @@ void free_prog(AST_prog t);
 
 /* print an AST*/
 void print_expr(AST_expr t);
-void print_comm(AST_comm t);
+void print_comm(AST_comm t,char* lab);
 void print_prog(AST_prog t);

@@ -79,9 +79,9 @@ NaN	{
 "="			{ return ASSIGN; }
 
 
-[\t\r]	{ ; } // separator
+[ \t\r\n]	{ ; } // separator
 
-\n	{ printf("lex: fin de lecture\n\n");
+[[:space:]]*EOF[[:space:]]	{ printf("lex: fin de lecture\n\n");
 	  return 0; }
 
 .	{ printf("lex: création token %s\n",yytext);

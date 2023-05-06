@@ -235,12 +235,12 @@ void print_expr(AST_expr t){
 
 /*Post_fix print an AST*/
 void post_fix(AST_expr t) {
-    if (t == NULL) 
-	    return;
+    if (t == NULL)
+	return;
     if(strcmp(t->rule, "&&") == 0)
     {
 	post_fix(t->left);
-	printf("CondJmp %d\n", t->right->size);
+	printf("CondJmp %d\n", t->right->size + 1);
 	post_fix(t->right);
 	printf("Jump 1\n");
 	printf("CsteBo False\n");
@@ -308,7 +308,8 @@ void post_fix(AST_expr t) {
 }
 
 
-void print_comm(AST_comm t){
+void print_comm(AST_comm t, char* Lab){
+
   if (t!=NULL) {
     //printf("[ ");
    // printf(":%c: ",t->rule);
@@ -319,17 +320,20 @@ void print_comm(AST_comm t){
     if(strcmp(t->rule, "if") == 0)
     {
     	post_fix(t->expr1);
-	printf("CondJump %d\n", t->com1->size);
-    	print_comm(t->com1);
-	printf("Jump %d\n", t->com2->size);
-    	print_comm(t->com2);
+	printf("CondJump if%d\n", t->com1->size);
+	print_comm(t->com1, Lab);
+	printf("Jump el%d\n", t->com2->size);
+	printf("if%d ", t->com1->size);
+	print_comm(t->com2, Lab);
+	printf("el%d ", t->com2->size);
     }
     else if(strcmp(t->rule, "wh") == 0)
     {
+	printf("wh%d ", t->com1->size);
+    	print_comm(t->com1, NULL);
 	post_fix(t->expr1);
-	printf("CondJump %d\n", t->com1->size);
-    	print_comm(t->com1);
-	printf("Jump -%d\n", t->com1->size+t->expr1->size);
+	printf("CondJump wh%d\n", t->com1->size);
+	//printf("Jump -%d\n", t->com1->size+t->expr1->size);
     }
     else if(strcmp(t->rule, "el") == 0)
     {
@@ -355,8 +359,10 @@ void print_comm(AST_comm t){
 
 void print_prog(AST_prog program) {
   AST_command_list curr_command = program->command_list;
+  char *Lab = malloc(sizeof(char)*7);
+
   while (curr_command != NULL) {
-    print_comm(curr_command->command);
+    print_comm(curr_command->command, Lab);
     curr_command = curr_command->next;
   }
   free_prog(program);
