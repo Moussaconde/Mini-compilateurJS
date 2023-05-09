@@ -18,33 +18,36 @@
 
 "True" | "False" 	{ return BOOLEAN ;}
 
-"=="		{ return EQUAL; }
+[[:space:]]*"=="[[:space:]]*		{ return EQUAL; }
 
-"<="		{ return LESS_EQUAL;}
+[[:space:]]*"<="[[:space:]]*		{ return LESS_EQUAL;}
 
-">="		{ return GR_EQUAL; }
+[[:space:]]*">="[[:space:]]*		{ return GR_EQUAL; }
 
-"!="		{ return NOT_EQUAL; }
+[[:space:]]*"!="[[:space:]]*		{ return NOT_EQUAL; }
 
-"!"		{ return NEGATION; }
+[[:space:]]*"!"[[:space:]]*		{ return NEGATION; }
 
-">"		{ return GREATER; }
+[[:space:]]*">"[[:space:]]*		{ return GREATER; }
 
-"<"		{ return LESSER; }
+[[:space:]]*"<"[[:space:]]*		{ return LESSER; }
 
 
 [0-9]*\.?[0-9]+e-?[0-9]+	{ return NUMBER; }
 
 [a-zA-Z_][a-zA-Z0-9_]*		{ return IDENT; }
 
-[[:space:]]*import[[:space:]]			{ return IMPORT; }
+[[:space:]]*import[[:space:]]+			{ return IMPORT; }
 
-[[:space:]]*if[[:space:]]		{ return IF; }
+[[:space:]]*if[[:space:]]*		{ return IF; }
 
-[[:space:]]*else[[:space:]]		{ return ELSE; }
+[[:space:]]*else[[:space:]]*		{ return ELSE; }
 
-[[:space:]]*while[[:space:]]		{ return WHILE; }
+[[:space:]]*while[[:space:]]*		{ return WHILE; }
 
+[[:space:]]*function[[:space:]]*		{ return FUNCTION; }
+
+[[:space:]]*return[[:space:]]*		{ return RETURN; }
 
 \/\/.*				{ printf("Commentaire \n");
 					return 0; }
@@ -52,12 +55,12 @@
 
 "NaN"			{ return NUMBER;}
 
-"&&"			{ return AND; }
+[[:space:]]*"&&"[[:space:]]*			{ return AND; }
 
-"="			{ return ASSIGN; }
+[[:space:]]*"="[[:space:]]*			{ return ASSIGN; }
 
 
-[\t\r]	{ ; } // separator
+[ \t\r]	{ ; } // separator
 
 \n	{ printf("lex: fin de lecture");
 	  return 0; }

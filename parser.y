@@ -20,6 +20,8 @@
 %nonassoc NEGATION
 %nonassoc UMOINS
 
+%token		FUNCTION
+%token		RETURN
 %token		IF
 %token		ELSE
 %token		WHILE
@@ -49,7 +51,13 @@ commande: expression ';'
 	 | '{' programme '}'
 	 | IF '(' expression ')' commande ELSE commande
 	 | WHILE '(' expression ')' commande
+	 | FUNCTION IDENT '(' decl_args ')' '{' programme '}'
+	 | RETURN expression ';'
 	 ;
+
+decl_args: %empty
+	 | IDENT
+	 | IDENT ',' decl_args
 
 expression: // an expression is
 	  expression '+' expression {
@@ -86,6 +94,12 @@ expression: // an expression is
 		printf("booleen\n");}
 	| IDENT ASSIGN expression {
 		printf("variable\n");}
+	| IDENT '(' arguments ')'
+	;
+
+arguments: %empty
+	 | expression
+	 | expression ',' arguments
 	;
 
 %% // denotes the end of the grammar
